@@ -68,15 +68,6 @@ public class Main {
                             List modelName = Arrays.asList(fileName);
                             model_id = getId(connection,modelName);
 
-//                            if (model_id == 0) {
-//                                String sqlModel = "INSERT INTO all_models (name,brand_id) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM all_models WHERE name=? AND brand_id= ?);";
-//                                List modelParametrs = Arrays.asList(fileName, brand_id, fileName, brand_id);
-//                                update(connection, sqlModel, modelParametrs);
-//
-//                                List newModelName = Arrays.asList(fileName);
-//                                model_id = getId(connection,newModelName);
-//                            }
-
                             System.out.println(fileName + ": " + model_id);
                             try {
                                 FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
