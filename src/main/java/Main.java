@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class Main {
     private static final String DEFAULT_DRIVER = "org.postgresql.Driver";
-//    private static final String DEFAULT_URL = "jdbc:postgresql://localhost:5432/part4_new";
-    private static final String DEFAULT_URL = "jdbc:postgresql://116.203.55.188:5432/zapchasty";
+    private static final String DEFAULT_URL = "jdbc:postgresql://localhost:5432/zapchasty";
+//    private static final String DEFAULT_URL = "jdbc:postgresql://116.203.55.188:5432/zapchasty";
     private static final String DEFAULT_USERNAME = "zapchasty";
     private static final String DEFAULT_PASSWORD = "zapchasty_GfhjkzYtn321";
 
@@ -65,8 +65,19 @@ public class Main {
                         if (fileName.contains("_images")){
                             fileName = fileName.replaceAll("_images","");
 
-                            List modelName = Arrays.asList(fileName);
-                            model_id = getId(connection,modelName);
+                            fileName = fileName.replaceAll("([a-zA-Z0-9]+ мм)? \\([a-zA-Z0-9]+\\)", "").trim();
+                            fileName = fileName.replaceAll("[+]", "plus");
+                            fileName = fileName.replaceAll("[/]", "_");
+
+                            String nDetailName = fileName.replaceAll("(-)(?!.*-)", "");
+
+                            List editModelIdParametrs = Arrays.asList(nDetailName);
+                            model_id = getId(connection, editModelIdParametrs);
+
+                            if (model_id == 0) {
+                                List modelName = Arrays.asList(fileName);
+                                model_id = getId(connection, modelName);
+                            }
 
                             System.out.println(fileName + ": " + model_id);
                             try {
@@ -147,6 +158,7 @@ public class Main {
             for (Object parameter : parameters) {
                 ps.setObject(++i, parameter);
             }
+            System.out.println(ps.toString());
             numRowsUpdated = ps.executeUpdate();
         } finally {
             close(ps);
